@@ -1,0 +1,27 @@
+# shell cmds
+mysql -u root -p
+
+# then execute mysql commands
+DROP USER 'hadoop'@'%';
+DROP USER 'hadoop'@'localhost';
+DROP USER 'hadoop'@'127.0.0.1';
+
+CREATE USER 'hadoop'@'localhost' IDENTIFIED BY '123456';
+CREATE USER 'hadoop'@'127.0.0.1' IDENTIFIED BY '123456';
+CREATE USER 'hadoop'@'%' IDENTIFIED BY '123456';
+
+GRANT ALL PRIVILEGES ON *.* TO 'hadoop'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'hadoop'@'127.0.0.1' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'hadoop'@'%' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+
+# init hive & display hive info
+schematool -initSchema -dbType mysql --verbose
+schematool -dbType mysql -info
+
+# create kafka topic
+bin/kafka-topics --create --zookeeper localhost:2181 --partitions 1 --replication-factor 1 --topic my-news
+bin/kafka-topics --describe --zookeeper localhost:2181 --topic my-news
+bin/kafka-console-producer --broker-list localhost:9092 --topic my-news
+bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic my-news

@@ -90,6 +90,7 @@ while True:
     try:
         for message in consumer:
             preprocessed_article = preprocess_article(message.value)
+            print("%s" % preprocessed_article["title"])
             json_obj.append(preprocessed_article)
 
             if time() - start_time > 60:

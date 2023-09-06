@@ -3,18 +3,15 @@ import streamlit as st
 from pysentimiento import create_analyzer
 from subprocess import Popen, PIPE
 
-# Initialize sentiment analyzer
-analyzer = create_analyzer(task="sentiment", lang="es")
 
-
-# Function to get articles from hive
 def get_articles():
     hive = Popen(['hive', '-e', 'use default; select content from articles;'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = hive.communicate()
-    if hive.returncode:
-        raise Exception(stderr)
     return stdout.decode('utf-8').splitlines()
 
+
+# Initialize sentiment analyzer
+analyzer = create_analyzer(task="sentiment", lang="es")
 
 # Streamlit application
 st.title("Sentiment Analysis of Articles")
